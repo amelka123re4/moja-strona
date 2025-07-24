@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Podaj swój numer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+      background: #f0f0f0;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin-top: 20px;
+      width: 250px;
+    }
+    .success {
+      color: green;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Podaj swój numer telefonu</h1>
+  <input type="tel" id="phone" placeholder="np. 500123456" required>
+  <br>
+  <button onclick="sendNumber()">Wyślij</button>
+  <div class="success" id="status"></div>
+
+  <script>
+    function sendNumber() {
+      const phone = document.getElementById("phone").value;
+
+      if (!phone) {
+        alert("Wpisz numer telefonu!");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbz65VVVKCQN5mKKgPhbbnKI_mDMDHayLOSXnms7dsyPOFb21yBngF6JXYDgjtraozZUVg/exec", {
+        method: "POST",
+        body: JSON.stringify({ phone: phone }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.text())
+      .then(response => {
+        document.getElementById("status").textContent = "Dziękujemy! Numer zapisany.";
+        document.getElementById("phone").value = "";
+      })
+      .catch(error => {
+        document.getElementById("status").textContent = "Wystąpił błąd. Spróbuj ponownie.";
+        console.error("Error:", error);
+      });
+    }
+  </script>
+</body>
+</html>
